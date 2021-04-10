@@ -1,0 +1,27 @@
+<?php include ROOT.'/App/Views/layouts/header_admin.phtml'; ?>
+
+<section>
+    <div class="row">
+<h4>Редактировать категорию № <?php echo $id; ?></h4>
+<br/>
+
+<form class="form-inline" action="" method="post">
+    <label class="mr-sm-2 mb-0" for="first_name">Код категории</label>
+    <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0" id="first_name" name="cat_code">
+    <label class="mr-sm-2 mb-0" for="last_name">Название категории</label>
+    <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0" id="last_name" name="cat_name">
+    <button type="submit" class="btn btn-primary mt-2 mt-sm-0">Изменить</button>
+</form>
+
+
+
+<div class="page-buffer"></div>
+    </div>
+</section>
+</div>
+</body>
+
+<footer id="footer" class="page-footer"><!--Footer-->
+    <div class="footer-bottom"></div>
+</footer><!--/Footer-->
+
