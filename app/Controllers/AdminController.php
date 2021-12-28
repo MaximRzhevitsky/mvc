@@ -1,91 +1,78 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Max
- * Date: 08.04.2021
- * Time: 14:37
- */
 
 namespace App\Controllers;
 
+use App\Models\Comments;
 use App\Models\User;
-use App\Models\Categories;
 
 class AdminController
 {
-    private $user;
-    private $categories;
-    public $admin = array();
-
-    function __construct()
+    public function login()
     {
-        $this->user = new User();
-        $this->categories=new Categories();
-    }
+        if (isset($_POST['submit']))
+        {
+            $login = $_POST['login'];
+            $password = $_POST['password'];
+            $errors = false;
+            $this->user = new User();
+            $checklogin = $this->user->checkUserData($login, $password);
 
-            public function login(){
-                $admin = $this->user->getLogin();
-                if (!empty($_POST['name']) && !empty($_POST['password'])){
-                    $login= $_POST['name'];
-                    $pass=$_POST['password'];
-                    if(($login==$admin['login']) && ($pass==$admin['password'])){
-                        header("Location: /admin_category");
-                    }
-                    else {
-                        echo "Не правильный логин или пароль";
-                    }
-                }
-                else {
-                    echo 'форма не отправлена';
-                }
-                require_once(ROOT . '/App/Views/admin/admin_login.phtml');
-                return true;
+            if (empty($checklogin))
+            {
+                $errors[] = 'Неправильные данные для входа на сайт';
             }
-
-    public function category(){
-        $categoryList = $this->categories->getCategories();
-
-        require_once (ROOT. '/App/Views/admin/admin_category.phtml');
-
-    }
-
-    public function cat_update($id){
-        if (isset($_POST['cat_code']) || isset($_POST['cat_name'])) {
-            $new_cat_code = $_POST['cat_code'];
-            $new_cat_name = $_POST['cat_name'];
-            $new_id=$this->categories->updateCategory($new_cat_code,$new_cat_name,$id);
-            if($new_id){
-            }
-            header("Location: /admin_panel");
+            else header("Location: cabinet");
         }
-        require_once (ROOT. '/App/Views/admin/cat_update.phtml');
-return true;
-    }
-
-    public function category_delete($id){
-        $categoryId=$this->categories->getCategoryById($id);
-        if(isset($_POST['submit'])){
-            $del_id=$this->categories->deleteCategory($id);
-            if($del_id){
-            }
-            header("Location: /admin_panel");
-        }
-        require_once (ROOT. '/App/Views/admin/cat_delete.phtml');
-    }
-
-
-    public function cat_create(){
-        if (isset($_POST['cat_code']) || isset($_POST['cat_name'])) {
-            $new_cat_code = $_POST['cat_code'];
-            $new_cat_name = $_POST['cat_name'];
-            $new_category=$this->categories->createCategory($new_cat_code,$new_cat_name);
-            if($new_category){
-            }
-            header("Location: /admin_panel");
-        }
-
-        require_once (ROOT. '/App/Views/admin/cat_create.phtml');
+        require_once(ROOT.'/app/Views/login.php');
         return true;
     }
 
+
+    public function Cabinet()
+    {
+        $this->comments = new Comments();
+        $commentsList = $this->comments->adminAllComments();
+        require_once(ROOT . '/app/Views/cabinet.php');
+        return true;
+    }
+
+
+    public function editComment($id)
+    {
+        $this->comments = new Comments();
+        $comment = $this->comments->getCommentById($id);
+
+        if (isset($_POST['submit']))
+        {
+            // Если форма отправлена
+            // Получаем данные из формы
+            $text=$_POST['text'];
+            $id=$comment['id'];
+            $this->comments = new Comments();
+            $corrected=1;
+
+            $res = $this->comments->updateComment($text, $corrected, $id);
+
+            if($res) header("Location: /cabinet");
+        }
+        require_once(ROOT . '/app/Views/edit_comment.php');
+    }
+
+
+    public function deleteComment($id)
+    {
+        $this->comments = new Comments();
+        $res = $this->comments->deleteComment($id);
+
+        if($res) header("Location: /cabinet");
+    }
+
+
+    public function publicate($id)
+    {
+        $this->comments = new Comments();
+        $res = $this->comments->publicateComment($id);
+
+        if($res) header("Location: /cabinet");
+    }
 }

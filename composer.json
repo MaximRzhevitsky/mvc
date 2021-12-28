@@ -1,6 +1,8 @@
 {
-  "name": "vadym/mvc",
-  "require": {},
+  "name": "max/commentbook",
+  "require": {
+    "ext-pdo": "*"
+  },
   "autoload": {
     "psr-4": {
       "App\\": "app/"

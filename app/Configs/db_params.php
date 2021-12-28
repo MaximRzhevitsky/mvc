@@ -2,7 +2,7 @@
 
 return [
     'host' => 'localhost',
-    'dbName' => 'mvc',
+    'dbName' => 'guestbook',
     'user' => 'root',
     'password' => 'root'
 ];

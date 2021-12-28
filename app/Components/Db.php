@@ -29,7 +29,7 @@ class Db
 
             return static::$connection;
         } catch (PDOException $ex) {
-            echo 'Не работает';
+            echo 'Не работает соединение с бд';
             die;
         }
     }
